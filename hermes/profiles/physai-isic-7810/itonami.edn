@@ -1,0 +1,12 @@
+;; Kotoba owns the agent and cron scheduler for this profile after adoption.
+;; One profile, one side (ADR-2610222100): this file makes the profile an
+;; itonami agent, so its murakumo rail is declared here in :inference.
+{:profile/id "physai-isic-7810"
+ :profile/hermes-compatible true
+ :runtime {:engine :itonami-agent
+           :scheduler :itonami}
+ :inference {:rails [:murakumo]
+             :authorities ["api.murakumo.cloud"]
+             :deny-hosts ["openrouter.ai"]}
+ :itonami/schema "cloud.itonami.profile.v1"
+ :cron? true}
