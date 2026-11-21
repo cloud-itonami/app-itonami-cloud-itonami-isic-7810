@@ -47,6 +47,7 @@ export const TEMPLATE_FILES = [
   "test/android-manifest.test.mjs",
   "test/attribution.test.mjs",
   "test/build.test.mjs",
+  "test/cargo-lock.test.mjs",
   "test/console.test.mjs",
   "test/identity.test.mjs",
   "test/layout.test.mjs",

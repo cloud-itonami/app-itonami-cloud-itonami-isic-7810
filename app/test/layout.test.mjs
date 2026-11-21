@@ -80,6 +80,31 @@ test("the only wide content scrolls inside its own box", () => {
   }
 });
 
+test("a wide table scrolls inside its box and shows that it does", () => {
+  const box = rule(".table-scroll");
+  assert.equal(box["max-width"], "100%");
+  assert.equal(box["overscroll-behavior-x"], "contain", "a sideways swipe at the end does not move the page");
+  assert.match(box.background, /local/, "the cover gradients scroll with the content");
+  assert.match(box.background, /var\(--scroll-shadow\)[^,]*,[^,]*\bscroll\b/, "the edge shadows stay at the box edges");
+  const table = rule("table");
+  assert.equal(table["min-width"], undefined, "a table is not forced wider than a phone");
+  assert.equal(table["overflow-wrap"], "normal", "cells wrap at spaces, not inside words");
+  for (const sel of ["table", "thead th", "th,\ntd"]) {
+    for (const decls of everywhere(sel)) assert.notEqual(decls["white-space"], "nowrap", `${sel} may wrap`);
+  }
+  assert.match(css, /--scroll-shadow:[^;]+;[\s\S]*prefers-color-scheme: dark[\s\S]*--scroll-shadow:/, "each theme has its own shadow colour");
+});
+
+test("a badge that wraps keeps its text clear of the rounded border", () => {
+  const badge = rule(".badge");
+  assert.equal(badge["max-width"], "100%");
+  const radius = parseFloat(badge["border-radius"]);
+  assert.ok(badge["border-radius"].endsWith("rem") && radius <= 1, "no pill radius that curves into wrapped text");
+  const [vertical, horizontal = vertical] = badge.padding.split(/\s+/).map(parseFloat);
+  assert.ok(horizontal >= radius, "the side padding is at least the radius");
+  assert.ok(vertical > 0.25, "more than the old 0.25rem above and below");
+});
+
 test("every table the view builds is inside .table-scroll", () => {
   const data = {
     identity: { scheme: "isco", code: "2423", classification: "ISCO-08 unit group 2423", id: "network.itonami.isco2423", stateSchema: "s", source: "cloud-itonami-isco-2423", title: "T" },
