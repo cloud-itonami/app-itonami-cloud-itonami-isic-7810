@@ -38,6 +38,10 @@ body {
   font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
   font-size: 16px;
   line-height: 1.7;
+  /* A long token (a SHA-256 digest, an id, a path) breaks instead of widening
+     the page: on Android a wider layout viewport lets a sideways swipe shift
+     the whole page. Tables scroll inside .table-scroll. */
+  overflow-wrap: anywhere;
 }
 
 .top {
@@ -58,17 +62,20 @@ body {
   line-height: 1.4;
 }
 
+/* The tab row wraps: every tab stays in view at phone widths (360 px and up)
+   and nothing scrolls sideways, neither the row nor the page. */
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.25rem;
   max-width: 60rem;
   margin: 1rem auto 0;
   padding: 0 1rem;
-  overflow-x: auto;
 }
 
 .tabs [role="tab"] {
   flex: none;
+  max-width: 100%;
   min-height: 2.75rem;
   padding: 0.5rem 1rem;
   border: 1px solid var(--line);
